@@ -1,0 +1,17 @@
+server: 
+  port: 7001
+spring:
+  application:
+    name: approve-config 
+  cloud: 
+    config: 
+      server: 
+        git: 
+          password: aerbeisi163
+          searchPaths: cloud-config-repo
+          uri: "https://github.com/scj2085/config.git"
+          username: scj2085@163.com
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: "http://localhost:8761/eureka/"
