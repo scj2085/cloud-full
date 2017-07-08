@@ -55,10 +55,11 @@ public class ThrowExceptionFilter extends ZuulFilter {
 
 	@Override
 	public String filterType() {
-		return "pre";
+//		return "pre";
+		return "post";
 	}
 
 	private void doSomething() {
-		throw new RuntimeException("****************Exist some errors...");
+//		throw new RuntimeException("****************Exist some errors...");
 	}
 }
