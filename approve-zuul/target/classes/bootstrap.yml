@@ -28,4 +28,4 @@ server:
 eureka:
   client:
     serviceUrl:
-      defaultZone: "http://localhost:8761/eureka/"     #不使用注册中心,会带来侵入性
+      defaultZone: "http://peer1:8761/eureka/,http://peer2:8762/eureka/,http://peer3:8763/eureka/"     #不使用注册中心,会带来侵入性

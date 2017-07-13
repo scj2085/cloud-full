@@ -3,6 +3,11 @@
 spring:
   application:
     name: approve-provider #对应前配置文件中的{application}部分
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: springcloud
+    password: 123456
   cloud:
     config: 
    #   uri: "http://localhost:7001/" 当引用serviceid时，就代替了此url
@@ -18,4 +23,4 @@ server:
 eureka: 
   client: 
     serviceUrl: 
-      defaultZone: "http://localhost:8761/eureka/"
+      defaultZone: "http://peer1:8761/eureka/,http://peer2:8762/eureka/,http://peer1:8761/eureka/,http://peer3:8763/eureka/" #注册到集群中

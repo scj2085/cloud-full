@@ -1,0 +1,19 @@
+server: 
+  port: 7001
+spring:
+  application:
+    name: approve-config
+  cloud: 
+    config: 
+      server: 
+        git: 
+          password: aerbeisi163
+          searchPaths: cloud-config-repo
+          uri: "https://github.com/scj2085/config.git"
+          username: scj2085@163.com
+#    bus:
+#      destination: bus 
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: "http://peer1:8761/eureka/,http://peer2:8762/eureka/,http://peer3:8763/eureka/" #注册到集群中

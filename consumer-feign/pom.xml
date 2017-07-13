@@ -36,7 +36,17 @@
 		</snapshotRepository>
 	</distributionManagement>
 	<dependencies>
-
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.springframework.cloud</groupId> -->
+<!-- 			<artifactId>spring-cloud-starter-bus-amqp</artifactId> -->
+<!-- 		</dependency> -->
+ 		<!-- 实时刷新git中的repo配置文件，监控模块，其中包含了/refresh刷新API， --> 
+ 		<!-- 通过POST请求发送到http://localhost:7002/refresh实行刷新， 后续将介绍如何通过Spring Cloud  
+ 			Bus来实现以消息总线的方式进行通知配置信息的变化，完成集群上的自动化更新 --> 
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.springframework.boot</groupId> -->
+<!-- 			<artifactId>spring-boot-starter-actuator</artifactId> -->
+<!-- 		</dependency> -->
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-feign</artifactId>
