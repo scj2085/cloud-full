@@ -16,4 +16,4 @@ spring:
 eureka:
   client:
     serviceUrl:
-      defaultZone: "http://peer1:8761/eureka/,http://peer2:8762/eureka/,http://peer3:8763/eureka/" #注册到集群中
+      defaultZone: "http://peer1:8761/eureka/,http://peer2:8762/eureka/,http://peer3:8763/eureka/" #注册到集群中-
