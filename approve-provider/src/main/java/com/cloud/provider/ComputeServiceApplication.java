@@ -8,7 +8,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 
 /**
- * Hello world!
+ * Hello world
  *
  */
 @EnableDiscoveryClient//@EnableDiscoveryClient注解，用来发现config-server服务，利用其来加载应用配置,该注解能激活Eureka中的DiscoveryClient实现，才能实现Controller中对服务信息的输出
