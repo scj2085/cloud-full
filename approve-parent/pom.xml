@@ -1,0 +1,86 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.cloud</groupId>
+	<artifactId>approve-parent</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<name>cloud-parent</name>
+	<url>http://maven.apache.org</url>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<java.service>1.8</java.service>
+		<spring-cloud.version>Dalston.SR1</spring-cloud.version>
+	</properties>
+
+	<modules>
+		<module>approve-eureka</module>
+		<module>approve-eureka2</module>
+		<module>approve-eureka3</module>
+		<!-- <module>approve-config</module> -->
+		<module>approve-provider</module>
+		<module>approve-zuul</module>
+		<module>client-ribbon</module>
+	</modules>
+
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>1.5.2.RELEASE</version>
+	</parent>
+
+	<!-- 下载插件构件 -->
+	<distributionManagement>
+		<repository><!-- 发布版本构件的仓库 -->
+			<id>nexus-releases</id><!-- 私服中发布版本构件的宿主仓库id -->
+			<name>Nexus Releases Repository</name><!-- 发布版本构件的宿主仓库名 -->
+			<url>http://192.168.190.3:8081/nexus/content/repositories/releases</url><!-- 
+				私服中发布版本构件的宿主仓库url -->
+		</repository>
+		<snapshotRepository><!-- 私服中快件版本的宿主仓库 -->
+			<id>nexus-snapshots</id><!-- 私服中快件版本的宿主仓库 id -->
+			<name>Nexus Snapshot Repository</name><!-- 私服中快件版本的宿主仓库名称 -->
+			<url>http://192.168.190.3:8081/nexus/comtent/repositories/snapshots</url><!-- 
+				私服中快件版本的宿主仓库 url -->
+		</snapshotRepository>
+	</distributionManagement>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<version>1.5.4.RELEASE</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+	<!-- 主pom中把依赖通过<dependecyManagement>引起来，表示子pom可能会用到的jar包依赖 -->
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>Dalston.SR1</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<!-- 指定maven和jdk版本，防止每次maven update jkd改变 -->
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.3</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>

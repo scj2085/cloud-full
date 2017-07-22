@@ -1,0 +1,24 @@
+eureka: 
+  client: 
+    serviceUrl: 
+      defaultZone: "http://localhost:1111/eureka/"
+server: 
+  port: 9102
+spring: 
+  application: 
+    name: trace-2
+  sleuth:
+    sampler:
+      percentage: 1	#代表抽样收集100%的请求跟踪信息，信息被输出到远程分析系统zipkin，开发测试环境配成1，表示100%全部收集,生产环境配成0.1，表示10%  
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: springcloud
+    password: 123456
+#logging:
+#  level:
+#    org:
+#      springframework:
+#        web:
+#          servlet:
+#            DispatcherServlet: DEBUG #springMVC请求分发日志级别

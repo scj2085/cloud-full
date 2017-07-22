@@ -1,0 +1,15 @@
+#eureka集群
+spring:
+  application:
+    name: eureka-server
+server:
+  port: 8763
+eureka:
+  instance:
+    hostname: peer3 #注意：peer1是本服务的ip
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: "http://peer1:8761/eureka/,http://peer2:8762/eureka/" #注意：peer1是eureka的ip,此端口是eurka的端口,peer2是eureka2的ip,8762是eureka2的端口，集群的原理是两两互相注册
+#在/etc/hosts文件中添加对peer1、peer2和peer3的转换

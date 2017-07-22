@@ -4,13 +4,11 @@ spring:
   cloud:
     config: 
    #   uri: "http://localhost:7001/" 当引用serviceid时，就代替了此url
-     # profile: dev
+      profile: dev
       label: master
       discovery:
         enabled: true #参数设置为true，开启通过服务来访问Config Server的功能
         serviceId: approve-config #参数来指定Config Server注册的服务名   
-    
-    
 server:
   port: 5555
 #zuul路由规则已提取到git仓库
@@ -25,7 +23,7 @@ server:
 #   api-b:
 #      path: /attend/**
 #      serviceId: service-B
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: "http://peer1:8761/eureka/,http://peer2:8762/eureka/,http://peer3:8763/eureka/"     #不使用注册中心,会带来侵入性
+#eureka:
+#  client:
+#    serviceUrl:
+#      defaultZone: "http://peer1:8761/eureka/,http://peer2:8762/eureka/,http://peer3:8763/eureka/"     #不使用注册中心,会带来侵入性

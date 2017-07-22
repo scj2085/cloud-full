@@ -13,11 +13,13 @@ public class ComputeService {
     RestTemplate restTemplate;
     
     @HystrixCommand(fallbackMethod = "addServiceFallback")
-    public String addService() {
-        return restTemplate.getForEntity("http://approve-provider/add?a=10&b=20", String.class).getBody();
+    public Integer addService() {
+    	Integer aa = restTemplate.getForEntity("http://approve/add?a=10&b=20", Integer.class).getBody();
+    	System.err.println("********************" + aa);
+        return aa;
     }
     
-    public String addServiceFallback() {
-        return "error";
+    public Integer addServiceFallback() {
+        return 0;
     }
 }

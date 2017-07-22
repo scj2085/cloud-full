@@ -12,8 +12,23 @@ public class TestController {
     @Value("${from}")
     private String from;
     
+    @Value("${approve}")
+    private String approve;
+    
+    @Value("${db}")
+    private String db;
+    
     @RequestMapping("/from")
     public String from() {
         return this.from;
+    }
+    
+    @RequestMapping("/approve")
+    public String approve() {
+    	return this.approve;
+    }
+    @RequestMapping("/db")
+    public String db() {
+    	return this.db;
     }
 }
