@@ -12,8 +12,8 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
  * Hello world
  *
  */
-@EnableAutoConfiguration	//整合mybatis使用
-@EnableDiscoveryClient		//@EnableDiscoveryClient注解，用来发现config-server服务，利用其来加载应用配置,该注解能激活Eureka中的DiscoveryClient实现，才能实现Controller中对服务信息的输出
+@EnableAutoConfiguration	//整合mybatis使用，自动装配
+@EnableDiscoveryClient		//@EnableDiscoveryClient注解，该注解能激活Eureka中的DiscoveryClient实现,用来注册到eureks服务和发现其它服务，才能实现本服务对其它服务信息的输出
 @SpringBootApplication
 public class ComputeServiceApplication {
 	

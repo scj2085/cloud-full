@@ -6,14 +6,19 @@ server:
   port: 8761
 eureka:
   instance:
-    hostname: localhost #注意：localhost是本服务的ip
+    lease-renewal-interval-in-seconds: 30 #定义服务续约任务的调用间隔时间，默认30秒，每30秒检测一次服务提供者的心跳，如检测不到，会执行下面的90秒后此提供者服务会失效
+    lease-expiration-duration-in-seconds: 90 #定义服务失效的时间，默认90秒
+#    hostname: localhost #注意：localhost是主机名，代表本服务的ip,集群时使用，单例时一定要注释掉，会出现Registered instance APPROVE-CONFIG/shichangjian.ds.gome.com.cn:approve-config:7001 with status UP (replication=false)
   client:
-    registerWithEureka: false
-    fetchRegistry: false
+    register-with-eureka: false	#注册自己，默认true，若设置false将不会启动注册操作,在集群中设置true
+    fetch-registry: false		#检索服务,获取服务是服务消费者的基础，在集群中必须确保true
+    registry-fetch-interval-seconds: 30 #缓存清单的更新时间
     serviceUrl:
- #     defaultZone: "http://peer2:8762/eureka/,http://peer3:8763/eureka/" #注意：peer2是eureka2的ip,此端口是eurka2的端口,peer3是eureka3的ip,8763是eureka3的端口，集群的原理是两两互相注册
+ #     defaultZone: "http://peer2:8762/eureka/,http://peer3:8763/eureka/" #注意：peer2是eureka2的ip,此端口是eurka2的端口,peer3是eureka3的ip,8763是eureka3的端口，集群的原理是两两互相注册，如果不想使用instance，主机名peer1、peer2做注册中心的地址，可以使用ip，但是要配置eureka.instance.prefer-ip-address=true,该值默认false
       defaultZone: "http://localhost:8761/eureka/"
+  server:
+    enable-self-preservation: false #开发环境可以关闭自我保护机制,以确保注册中心可以将不可用的实例及时正确剔除
 #在/etc/hosts文件中添加对peer1、peer2和peer3的转换
 management:
   security:
-    enabled: false
+    enabled: false #springboot的security安全开关

@@ -8,7 +8,7 @@ import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
  * Hello world!
  *
  */
-@EnableEurekaServer
+@EnableEurekaServer//提供一个服务注册中心，给其它应用进行对话
 @SpringBootApplication
 public class EurekaApplication {
 	public static void main(String[] args) {

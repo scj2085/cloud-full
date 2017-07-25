@@ -9,6 +9,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
 
 /**
+ * 可以通过提供服务方配置的ribbonServerList服务端列表去轮询访问以达到均衡负载的作用，
+ * 和eureka联合使用时，ribbonServerList会被DiscoveryEnabledNIWSServerList重写，从eureka注册中心获取服务端列表，
+ * 将职责委托给eureka来确定服务端已经启动
  * Hello world!
  *
  */

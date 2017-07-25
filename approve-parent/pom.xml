@@ -20,7 +20,7 @@
 		<module>approve-eureka</module>
 		<module>approve-eureka2</module>
 		<module>approve-eureka3</module>
-		<!-- <module>approve-config</module> -->
+		<module>approve-config</module>
 		<module>approve-provider</module>
 		<module>approve-zuul</module>
 		<module>client-ribbon</module>
@@ -49,6 +49,11 @@
 	</distributionManagement>
 
 	<dependencies>
+	<!-- 	请求重试机制，为了解决eureka的自我保护机制 -->
+		<dependency>
+			<groupId>org.springframework.retry</groupId>
+			<artifactId>spring-retry</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -69,7 +74,7 @@
 		</dependencies>
 	</dependencyManagement>
 
-	<!-- 指定maven和jdk版本，防止每次maven update jkd改变 -->
+		<!-- 指定maven和jdk版本，防止每次maven update jkd改变 -->
 	<build>
 		<plugins>
 			<plugin>
@@ -80,6 +85,10 @@
 					<source>1.8</source>
 					<target>1.8</target>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
 	</build>

@@ -18,6 +18,9 @@ public class TestController {
     @Value("${db}")
     private String db;
     
+    @Value("${random}")
+    private int random;
+    
     @RequestMapping("/from")
     public String from() {
         return this.from;
@@ -30,5 +33,9 @@ public class TestController {
     @RequestMapping("/db")
     public String db() {
     	return this.db;
+    }
+    @RequestMapping("/random")
+    public int random() {
+    	return this.random;
     }
 }

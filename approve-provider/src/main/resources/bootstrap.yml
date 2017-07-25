@@ -16,9 +16,6 @@ spring:
     sampler:
       percentage: 1 
 server:
-  port: 2003
+  port: 2004
 
-#eureka: 
-#  client: 
-#    serviceUrl: 
-#      defaultZone: "http://peer1:8761/eureka/,http://peer2:8762/eureka/,http://peer1:8761/eureka/,http://peer3:8763/eureka/" #注册到集群中
+random: ${random.int[10,20]}	#产生一个10-20的随机数，用于秘钥和端口
