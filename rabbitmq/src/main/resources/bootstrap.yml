@@ -2,15 +2,15 @@ spring:
   application:
     name: rabbitmq
   rabbitmq:
-    host: localhost
+    host: 127.0.0.1
     port: 5672
     username: springcloud
     password: 123456
-  cloud:
-    stream:
-      bindings:
-        input:
-          content-type: application/json      
-		  destination: output
-		output:
-		  destination: input  
+#  cloud:
+#    stream:
+#      bindings:
+#        input:
+#          content-type: application/json      
+#		  destination: output
+#		output:
+#		  destination: input  
