@@ -1,9 +1,93 @@
-#eureka: 
-#  client: 
-#    serviceUrl: 
-#      defaultZone: "http://peer1:8761/eureka/,http://peer2:8762/eureka/,http://peer3:8763/eureka/"
+management:
+  port: 1114   #actuator暴露接口使用的端口，为了和api接口使用的端口进行分离
+  context-path: /admin   #actuator暴露接口的前缀
+  security:
+    enabled: true #actuator是否需要安全保证，管理端点暴露，此配置限制了及时动态刷新，待解决？？？？？
+security:
+  basic:
+    enabled: true #指定接口需要验证
+    path: /admin #针对/admin路径进行认证
+  user:
+    name: shichangjian #为此服务添加访问权限
+    password: 123 
 server: 
   port: 3333
 spring: 
   application: 
-    name: cliet-ribbon
+    name: client-ribbon
+  cloud:
+    loadbalancer:
+      retry:
+        enabled: true #用来开启重试机制，默认是关闭false
+    config:
+      username: shichangjian #连接config-service的用户名
+      password: 123 #连接config-service的密码 
+      profile: dev,mysql
+      label: master
+      discovery:
+        enabled: true #参数设置为true，开启通过服务来访问Config Server的功能
+        serviceId: approve-config #参数来指定Config Server注册的服务名
+#  sleuth:
+#    sampler:
+#      percentage: 1 
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+#          thread: true #用来配置当HystrixCommand.run()执行超时的时候是否要将它中断，默认true，全局配置
+          thread:
+            timeoutInMilliseconds: 10000 #断路器的超时时间需要大于Ribbon的超时时间，不然不会触发重试
+          strategy: THREAD #通过线程池隔离的策略，“壁仓模式”实现 线程隔离，全局配置 
+        timeout:
+          enabled: true #用来配置HystrixCommand.run()的执行是否启用超时时间，默认true，全局配置    
+        semaphore: 10 #隔离策略使用信号量的策略，该属性用来配置信号量的大小（并发请求数），当最大请求数达到该配值时，后续请求将会被拒绝 ，默认10，全局配置
+      circuiBreaker:
+        enabled: true #用来确定当服务请求命令失败时，是否使用断路器来跟踪其健康指标和熔断请求，默认true,全局配置
+        requestVolumeThreshold: 20 #用来设置在滚动时间窗中（滚动时间窗默认10秒），断路器熔断的最小请求数，如 默认该值20，如果滚动时间窗内仅收到了19个请求，即使这19个请求都失败了，断路器也不会打开，默认值20，全局配置
+        sleepWindowInMilliseconds: 5000 #该属性用来设置当断路器打开之后的休眠时间窗，休眠时间窗结束之后，会将断路器置为半开状态，尝试熔断的请求命令，如果依然失败就将断路器设置为打开状态，如果成功就设置为关闭状态，默认5000，全局配置
+        errorThresholdPercentage: 50 #用来设置断路器打开的百分比条件，在滚动时间窗中，在请求数超过requestVolumeThreshold阀值的情况下，如果错误请求数的百分比超过50，就把断路器设置为打开状态，否则设置为关闭状态，默认50.全局配置
+        forceopen: false #如果该属性设置 为true，断路器将强制进入打开状态，它会拒绝所有请求，该属性优于circuitBreaker.forceClosed属性,默认false，全局配置
+        forceClosed: false #如果将该属性设置为true，断路器将强制进入关闭状态，它会接收所有请求，如果circuitBreaker.forceOpen属性为true，该属性不会生效，默认false，全局配置
+      metrics:
+        rollingStats:
+          timeInMilliseconds: 10000 #用来设置滚动时间窗的长度，该事件用于断路器判断健康度时需要收集信息的持续时间，断路器在收集指标信息的时候会根据设置的时间窗的长度拆分为多个桶来累计个度量值，每个桶记录了一段时间内的采集指标，如采用默认值10000毫秒时，断路器默认将其拆分为10个桶，（桶的数量通过metrics.rolling-stats.numBuckets参数设置）每个桶设置1000毫秒内的 指标信息，注意：Hystrix 1.4.12（Brixton.SR5版本使用了1.5.3版本）只有初始化时生效，及时动态刷新不会产生效果，默认10000，全局设置 
+          numBuckets: 10 #用来设置滚动时间窗统计指标信息时划分桶的数量，默认10，全局设置，注意：Hystrix 1.4.12（Brixton.SR5版本使用了1.5.3版本）只有初始化时生效，及时动态刷新不会产生效果，默认10，全局设置
+#        rollingPercentile: 60000 $用来设置百分位统计的滚动窗口的持续 时间，默认60000，全局设置，同上不能及时更新配置
+        rollingPercentile:
+          enabled: true #用来设置对命令执行的延迟是否使用百分位数来跟踪和计算，如果为false，那么所有的概要都将返回-1，默认true，全局设置  
+          numBuckets: 6 #用来设置百分比统计滚动窗口中使用桶的数量，默认6，全局设置，不能及时更新配置
+          bucketSize: 100 #用来设置在执行过程中每个桶中保留的最大执行次数，如滚动时间窗内发生超过该设定 值的执行次数，就从最初的位置 开始重写，如将该值设置为100，滚动窗口为10秒，若在10秒内一个桶中发生了500次执行，那么该桶中只保留最后100次的统计，另外，增加该值的大小将会增加内存量的消耗，并增加排序百分位数所需的计算时间，默认 100，全局设置，不能及时更新配置
+        healthSnapshot:
+          intervalIn-Milliseconds: 500 #用来设置采集影响断路器状态的健康快照（请求的成功，错误百分比）的 间隔等待 时间，默认500，全局配置  
+      requestCache:
+        enabled: true #用来配置 是否开启请求缓存，默认true，全局配置
+      requestLog:
+        enabled: true #用来设置HystrixCommand的执行和事件是否打印日志到HystrixRequestLog中，默认配置true，全局配置
+    fallback:
+      isolation:
+        semaphore: 10 #该属性用来设置从调用线程中允许HystrixCommand.getFallback()方法执行的并发请求数，当达到最大并发请求数时，后续的请求将会被拒绝并抛出异常，应为已没有后续的fallback可以被调用，默认10，全局配置
+    enabled: true #用来设置服务降级策略是否启用  ，默认true，全局配置   
+  collapser:
+    default:
+      maxRequestsInBatch: Integer.MAX_VALUE #用来设置一次请求合并批处理中允许的最大请求数，默认值，全局设置  
+      timerDelayInMilliseconds: 10 #用来设置批处理过程中每个命令延迟的时间，默认10秒，全局设置
+      requestCache:
+        enabled: true #用来设置批处理过程中是否开启请求缓存，默认true，全局设置
+  threadpool:
+    default:
+      coreSize: 10 #用来设置执行命令线程池的核心线程数，该值也是命令执行的最大 并发量，默认10，全局配置
+      maxQueueSize: -1 #用来设置线程池的最大队列大小，当设置-1时，线程池使用SynchronousQueue实现的队列，否则将使用LinkedBlockingQueue实现的队列，默认-1，全局设置，不能及时动态更新配置
+      queueSizeRejectionThreshold: 5 #用来为队列设置拒绝阀值，通过该参数，及时队列没有达到最大值也能拒绝请求 ，该参数主要是对LinkedBlocking-Queue队列的补充，因为LinkedBlockingQueue队列不能动态修改它 的对象大小，而通过该属性就可以调整拒绝请求的队列大小，默认值5，全局配置，注意：当maxQueueSize属性为-1的时候，该属性不会生效
+      metrics:
+        rollingStats:
+          time-InMilliseconds: 10000 #用来设置滚动时间窗的长度，单位毫秒，该滚动时间窗的长度用于线程池的指标度量，它 会被分成多个桶来统计指标，默认10000， 全局配置    
+          numBuckets: 10 #用来设置滚动时间窗被划分成桶的数量，默认10，全局配置，注意：time-InMilliseconds参数的设置必须能够被numBuckets参数整除，不然会抛出异常
+          
+approve: #对approve服务（提供服务方）的调用配置,此配置是指定某个服务实例的配置，如果是全局配置 不加approve服务名，即ribbon.Connectimeout=value
+  ribbon:
+    ConnectTimeout: 250 #请求连接的超时时间
+    ReadTimeout: 1000 #请求处理的超时时间
+    OkToRetryOnAllOperations: true #对所有操作都进行重试
+    MaxAutoRetriesNextServer: 2 #切换实例的重试次数 
+    MaxAtuoRetries: 1 #对当前实例的重试次数，当访问到故障请求的时候，他会在访问一次当前实例，次数由MaxTutoRetries配置，如果不行，就换一个实例进行访问，如果还是不行，在换一次实例访问，更好次数由MaxAutoRetriesNextServer配置，如果还是不行，返回失败信息

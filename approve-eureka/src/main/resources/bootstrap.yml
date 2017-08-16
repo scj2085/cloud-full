@@ -1,9 +1,16 @@
-#security:
-#  basic:
-#    enabled: true
-#  user:
-#    name: user
-#    password: 123
+security:
+  basic:
+    enabled: true #指定接口需要验证
+    path: /admin/**,/* #针对/admin路径进行认证
+  user:
+    name: shichangjian
+    password: 12345666
+management:
+  port: 1111   #actuator暴露接口使用的端口，为了和api接口使用的端口进行分离
+  context-path: /admin   #actuator暴露接口的前缀
+  security:
+    enabled: true #actuator是否需要安全保证，管理端点暴露，此配置限制了及时动态刷新，问题已解决
+   
 spring:
   application:
     name: eureka-server
@@ -14,9 +21,9 @@ eureka:
     lease-renewal-interval-in-seconds: 30 #定义服务续约任务的调用间隔时间，默认30秒，每30秒检测一次服务提供者的心跳，如检测不到，会执行下面的90秒后此提供者服务会失效
     lease-expiration-duration-in-seconds: 90 #定义服务失效的时间，eureka服务端在收到最后一次心跳之后等待的时间上限，超过时间之后服务端会将该服务实例从服务清单中剔除，从而禁止服务调用请求被发送到该实例上，默认90秒
 #    statusPageUrlPath: /${endpoints.info.path} #cloud的端点暴露，风险处理 ，此相对路径以https方式暴露的端点不能访问，必须用下面的配置，使用绝对路径
-    statusPageUrl: https://${erueka.instance.hostname}/info #cloud的端点暴露，风险处理 
+#    statusPageUrl: https://${erueka.instance.hostname}/info #cloud的端点暴露，风险处理 
 #    healthCheckUrlPath: /${endpoints.health.path} #cloud的端点暴露，风险处理 
-    healthCheckUrlPath: https://${erueka.instance.hostname}/health #cloud的端点暴露，风险处理 
+#    healthCheckUrlPath: https://${erueka.instance.hostname}/health #cloud的端点暴露，风险处理 
     hostname: 127.0.0.1 #注意：127.0.0.1是主机名，代表本服务的ip,特别提醒：不能使用域名，会出现Registered instance APPROVE-CONFIG/shichangjian.ds.gome.com.cn:approve-config:7001 with status UP (replication=false)，主机名不配置的时候将根据操作系统的主机名来获取，
     preferIpAddress: false #是否优先使用ip地址作为主机名的标识，如果改成true，在eureka监控页面，把鼠标放在服务 的实例up上，在左下角就会出现此服务的ip
     nonSecurePort: 80 #非安全的通信端口号，默认80
@@ -52,19 +59,16 @@ eureka:
     
     serviceUrl:
  #     defaultZone: "http://peer2:8762/eureka/,http://peer3:8763/eureka/" #注意：peer2是eureka2的ip,此端口是eurka2的端口,peer3是eureka3的ip,8763是eureka3的端口，集群的原理是两两互相注册，在/etc/hosts文件中添加对peer1、peer2和peer3的转换，如果不想使用instance，主机名peer1、peer2做注册中心的地址，可以使用ip，但是要配置eureka.instance.prefer-ip-address=true,该值默认false
-      defaultZone: "http://localhost:8761/eureka/"
-#      defaultZone: "http://user:123@localhost:8761/eureka/" #在url中加入相应的安全校验信息
+#      defaultZone: "http://localhost:8761/eureka/"
+      defaultZone: "http://shi:123@localhost:8761/eureka/" #在url中加入相应的安全校验信息，客户端服务注册eureka需要添加此用户名和密码
   server:
     enable-self-preservation: false #开发环境可以关闭自我保护机制,以确保注册中心可以将不可用的实例及时正确剔除
     eviction-interval-timer-in-ms: 4000 #清理无效节点的时间间隔
-management:
-  security:
-    enabled: false #springboot的security安全开关
-    
+ 
 #cloud的端点暴露，风险处理  
-endpoints:
-  info:
-    path: /appInfo
-  health:
-    path: /checkHealth  
+#endpoints:
+#  info:
+#    path: /appInfo
+#  health:
+#    path: /checkHealth  
     

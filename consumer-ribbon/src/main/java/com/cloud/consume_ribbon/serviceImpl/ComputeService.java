@@ -24,11 +24,20 @@ public class ComputeService {
     String url = "http://approve/addUserPost";
     
     
-    @HystrixCommand(fallbackMethod = "addServiceFallback")
+    @HystrixCommand(fallbackMethod = "addServiceFallback")//@HystrixCommand用于依赖服务返回单个操作结果的时候
     public Integer addService() {
     	ResponseEntity<Integer> resposEntity = restTemplate.getForEntity("http://approve/add?a={1}&b={2}", Integer.class,10,20);//Integer第二个参数是返回类型，10,20是占位符{1}{2}的参数
     	Integer body = resposEntity.getBody();
-    	System.err.println("********************" + body);
+    	long start = System.currentTimeMillis();
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	long end = System.currentTimeMillis();
+    	System.err.println("********************" + body + "Spend:" + (end-start));
+    	
         return body;
     }
     @HystrixCommand(fallbackMethod = "addUserError")
@@ -71,7 +80,7 @@ public class ComputeService {
     public User addUserPostUri() {
     	User user = new User("post",89);
     	UriComponents uriComponents =  UriComponentsBuilder.fromUriString("http://approve/addUserPost").build().encode();
-    	URI uri = uriComponents.toUri();//同一资源标识符（Uniform Resource Identifier）的引用,对rul中的参数进行绑定使用
+    	URI uri = uriComponents.toUri();//同一资源标识符（Uniform Resource Identifier）的引用,对rul中的参数进行绑定使用，就是URI对象是使用逻辑服务名定义为host的URI，返回的URI是通过ServiceInstance的服务实例详情拼接出的具体host:post形式的请求地址
     	ResponseEntity<User> responseEntity = restTemplate.postForEntity("http://approve/addUserPost",user,User.class,uri);//user第二个参数不仅包含body，还包含header，目前没有搞明白包含的header在哪里？？？？
     	User u = responseEntity.getBody();
     	System.err.println("********************" + u);
@@ -102,10 +111,14 @@ public class ComputeService {
     
     
     
-    
+    @HystrixCommand(fallbackMethod = "addServiceFallback2")
     public Integer addServiceFallback() {
     	
         return 0;
+    }
+    public Integer addServiceFallback2() {
+    	
+    	return 0;
     }
     public User addUserError() {
     	
@@ -118,5 +131,16 @@ public class ComputeService {
     public User addUserMapListError() {
     	
     	return new User("添加addUserMapListError网络不稳定",200);
+    }
+    
+    
+    
+    @HystrixCommand(fallbackMethod = "getUserByIdError")
+    public User getUserById(String id){
+    	throw new RuntimeException("getUserById command faild");
+    }
+    public User getUserByIdError(String id,Throwable e){//Throwable获取服务降级的具体异常内容
+    	assert "getUserById command  faild".equals(e.getMessage());
+		return null;
     }
 }

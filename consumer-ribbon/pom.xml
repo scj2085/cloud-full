@@ -19,6 +19,15 @@
 	</parent>
 	
 	<dependencies>
+		<!-- 	请求重试机制，为了解决eureka的自我保护机制 -->
+		<dependency>
+			<groupId>org.springframework.retry</groupId>
+			<artifactId>spring-retry</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-config</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
@@ -28,7 +37,11 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-	
+			<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+		
 <!-- 	ribbon，向eureka发送心跳，读取eureka缓存清单中的服务提供方-->
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
@@ -40,21 +53,20 @@
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-hystrix</artifactId>
 		</dependency>
+<!-- 	hystrix仪表盘监控 -->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-hystrix-dashboard</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-eureka</artifactId>
 		</dependency>
 		
-<!-- 	bus -->
+<!-- 		bus及时动态刷新，依赖springboot端点监控  -->
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-bus-amqp</artifactId>
-		</dependency>
-		
-<!-- 	springboot端点监控 -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
 		
 <!-- 	zipkin监控 cloud的DSR1此jar包要指定一个最新高版本-->

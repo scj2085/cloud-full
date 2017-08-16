@@ -1,0 +1,32 @@
+server: 
+  port: 5555
+spring: 
+  application: 
+    name: consumer-feign
+#management:
+#  security:
+#    enabled: false #默认是true，在这里是为了访问端点，关闭安全，和及时动态更新也有关系
+feign:
+  hystrix:
+    enabled: true #打开feign客户端的hystrix支持
+  compression:
+    request:
+      enabled: true #支持对请求的GZIP的压缩
+      mime-type: text/xml,application/xml,application/json #指定压缩请求数据类型，默认值
+      min-request-size: 2048 #超过这个大小的请求才会对其进行压缩，默认值
+    response:
+      enabled: true #支持对返回相应GZIP压缩
+approve: #对approve服务（提供服务方）的调用配置,此配置是指定某个服务实例的配置，如果是全局配置 不加approve服务名，即ribbon.Connectimeout=value
+  ribbon:
+    ConnectTimeout: 500 #请求连接的超时时间
+    ReadTimeout: 2000 #请求处理的超时时间
+    OkToRetryOnAllOperations: true #对所有操作都进行重试
+    MaxAutoRetriesNextServer: 2 #切换实例的重试次数 
+    MaxAtuoRetries: 1 #对当前实例的重试次数，当访问到故障请求的时候，他会在访问一次当前实例，次数由MaxTutoRetries配置，如果不行，就换一个实例进行访问，如果还是不行，在换一次实例访问，更好次数由MaxAutoRetriesNextServer配置，如果还是不行，返回失败信息
+Logging: #利用该日志对象的DEBUG模式来分析Feign的请求细节com.cloud.consume_feign.service.ComputeClient此路径是Feign客户端服务定义接口的完整路径，feign客户端默认是NONE级别，该级别不会记录任何Feign调用过程中的信息 ，所以要调整它 的级别，需要在configuration或主类中配置级别
+  level:
+    com:
+      cloud:
+        consume_feign:
+          service:
+            ComputeClient: debug #此功能没有实现???????

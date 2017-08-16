@@ -1,7 +1,8 @@
 package com.cloud.consume_ribbon.vo;
 
 public class User {
-
+	
+	private Long id;
 	private String name1;
 	private int age;
 	
@@ -24,6 +25,12 @@ public class User {
 	}
 	public void setAge(int age) {
 		this.age = age;
+	}
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
 	}
 	
 	

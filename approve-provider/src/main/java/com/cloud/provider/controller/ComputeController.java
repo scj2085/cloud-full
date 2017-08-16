@@ -10,6 +10,7 @@ import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -106,5 +107,41 @@ public class ComputeController {
     	User u = new User();
     	u.setName1("李四");
     	return u;
+    }
+    @RequestMapping(value = "/addHystrixDemotion" ,method = RequestMethod.DELETE)
+    public User addHystrixDemotion(@RequestParam("name1") String name1) {
+    	
+    	ServiceInstance instance = client.getLocalServiceInstance();
+    	logger.info("/addUser, host:" + instance.getHost() + ", service_id:" + instance.getServiceId() + ", result:" + name1);
+    	User u = new User();
+    	u.setName1("李四");
+    	return u;
+    }
+    @RequestMapping(value = "/hello1" ,method = RequestMethod.GET)
+    public String hello1(@RequestParam("name1") String name1) {
+    	
+    	ServiceInstance instance = client.getLocalServiceInstance();
+    	logger.info("/addUser, host:" + instance.getHost() + ", service_id:" + instance.getServiceId() + ", result:" + name1);
+    	User u = new User();
+    	u.setName1("李四");
+    	return "hello1";
+    }
+    @RequestMapping(value = "/hello2" ,method = RequestMethod.GET)
+    public User hello2(@RequestHeader String name1,@RequestHeader Integer age) {
+    	
+    	ServiceInstance instance = client.getLocalServiceInstance();
+    	logger.info("/addUser, host:" + instance.getHost() + ", service_id:" + instance.getServiceId() + ", result:" + name1);
+    	User u = new User();
+    	u.setName1("李四");
+    	return u;
+    }
+    @RequestMapping(value = "/hello3" ,method = RequestMethod.POST)
+    public Integer hello3(@RequestBody User user ) {
+    	
+    	ServiceInstance instance = client.getLocalServiceInstance();
+    	logger.info("/addUser, host:" + instance.getHost() + ", service_id:" + instance.getServiceId() + ", result:" + user.getName1());
+    	User u = new User();
+    	u.setName1("李四");
+    	return 3;
     }
 }

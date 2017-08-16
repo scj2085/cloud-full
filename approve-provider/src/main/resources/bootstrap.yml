@@ -5,6 +5,8 @@ spring:
     name: approve #对应前配置文件中的{application}部分
   cloud:
     config: 
+      username: shichangjian #连接config-service的用户名
+      password: 123
    #   uri: "http://localhost:7001/" 当引用serviceid时，就代替了此url
       profile: dev,mysql
       label: master
@@ -12,10 +14,24 @@ spring:
         enabled: true #参数设置为true，开启通过服务来访问Config Server的功能
         serviceId: approve-config #参数来指定Config Server注册的服务名
       #其实访问地址是:uri/application/dev/master
+    bus:
+      trace:
+        enabled: true #开启trace跟踪信息的监听和记录  
   sleuth:
     sampler:
-      percentage: 1 
+      percentage: 1 #监控信息采集，1代表100%
 server:
-  port: 2004
-
+  port: 2005
+management:
+  port: 1113   #actuator暴露接口使用的端口，为了和api接口使用的端口进行分离
+  context-path: /admin   #actuator暴露接口的前缀
+  security:
+    enabled: true #actuator是否需要安全保证，管理端点暴露，此配置限制了及时动态刷新，待解决？？？？？
+security:
+  basic:
+    enabled: true #指定接口需要验证
+    path: /admin #针对/admin路径进行认证
+  user:
+    name: shichangjian #为此服务添加访问权限
+    password: 123   
 random: ${random.int[10,20]}	#产生一个10-20的随机数，用于秘钥和端口

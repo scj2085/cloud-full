@@ -6,6 +6,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.config.server.EnableConfigServer;
 
 /**
+ * 当连接不到远程git会连接本地的git仓库，
  * Hello world!
  *
  */

@@ -13,12 +13,15 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
-
+<!-- 	<parent> -->
+<!-- 		<groupId>com.cloud</groupId> -->
+<!-- 		<artifactId>approve-parent</artifactId> -->
+<!-- 		<version>0.0.1-SNAPSHOT</version> -->
+<!-- 	</parent> -->
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>1.3.5.RELEASE</version>
-		<relativePath /> <!-- lookup parent from repository -->
+		<version>1.3.7.RELEASE</version>
 	</parent>
 	<!-- 下载插件构件 -->
 	<distributionManagement>
@@ -47,6 +50,10 @@
 <!-- 			<groupId>org.springframework.boot</groupId> -->
 <!-- 			<artifactId>spring-boot-starter-actuator</artifactId> -->
 <!-- 		</dependency> -->
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.springframework.cloud</groupId> -->
+<!-- 			<artifactId>spring-cloud-starter-config</artifactId> -->
+<!-- 		</dependency> -->
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-feign</artifactId>
@@ -54,6 +61,10 @@
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-eureka</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

@@ -1,21 +1,23 @@
 package com.cloud.rabbitmq.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.integration.support.MessageBuilder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cloud.rabbitmq.service.SinkSender;
+import com.cloud.rabbitmq.service.impl.Sender;
 
 @RestController
 public class SenderOutput {
 
 	@Autowired
-	private SinkSender sinkSender;
+	private Sender sender;
 	
-	@RequestMapping(value = "/output",method = RequestMethod.GET)
+	/**
+	 * 消息生产者 
+	 */
+	@RequestMapping(value = "/sender",method = RequestMethod.GET)
 	public void output(){
-		sinkSender.output().send(MessageBuilder.withPayload("From SinkSender").build());
+		sender.send();
 	}
 }

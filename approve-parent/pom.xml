@@ -24,6 +24,7 @@
 		<module>approve-provider</module>
 		<module>approve-zuul</module>
 		<module>client-ribbon</module>
+<!-- 		<module>consume-feign</module> -->
 	</modules>
 
 	<parent>
@@ -49,11 +50,7 @@
 	</distributionManagement>
 
 	<dependencies>
-	<!-- 	请求重试机制，为了解决eureka的自我保护机制 -->
-		<dependency>
-			<groupId>org.springframework.retry</groupId>
-			<artifactId>spring-retry</artifactId>
-		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>

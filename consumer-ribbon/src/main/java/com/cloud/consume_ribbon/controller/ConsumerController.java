@@ -1,6 +1,7 @@
 package com.cloud.consume_ribbon.controller;
 
 import java.util.List;
+import java.util.Random;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,7 +40,7 @@ public class ConsumerController {
 
     @RequestMapping("/getServerList")
     public void getServerList() throws Exception {
-        ZoneAwareLoadBalancer<Server> lb = (ZoneAwareLoadBalancer<Server>) clientFactory.getLoadBalancer("myclient");
+        ZoneAwareLoadBalancer<Server> lb = (ZoneAwareLoadBalancer<Server>) clientFactory.getLoadBalancer("approve");
         ServerList<Server> serverList = lb.getServerListImpl();
 
 
@@ -59,12 +60,15 @@ public class ConsumerController {
 	@RequestMapping(value = "/add", method = RequestMethod.GET)
 	public Integer add() {
 		System.err.println("***************88");
+	
 		return computeService.addService();
 	}
 	@RequestMapping(value = "/addUser", method = RequestMethod.GET)
 	public User addUser() {
 		System.err.println("***************89");
-		return computeService.addUser();
+		int a = 0;
+//		if(a == 0) throw new RuntimeException("00000000000000");
+		return a == 0 ? computeService.addUser():computeService.addUser(); 
 	}
 	@RequestMapping(value = "/addUserMap", method = RequestMethod.GET)
 	public User addUserMap() {
