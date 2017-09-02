@@ -1,0 +1,107 @@
+#重要声明：使用自定义标识名绑定器，会自动禁用默认的绑定器配置
+server.port=8889
+spring:
+  cloud:
+    stream:
+      instanceCount: 1 #应用程序部署的实例数量，当使用kafka的时候需要 设置分区，默认值1，基础配置 
+      instanceIndex: 0 #应用程序实例的索引，从0开始，最大值-1，当使用分区和kafka的时候使用，基础配置
+      dynamicDestinations: #动态绑定的 目标列表，该列表默认空，当设置了列表之后，只有列表中的目标才能发现，基础配置
+      overrideCloudConnectors: false #该属性只适用于 激活cloud配置并且提供了springCloudConnectors的应用，当使用默认属性false时，绑定器会自动检测合适的服务 来绑定（比如在cloud Foundy中绑定的rabbitMQ服务）为true时，绑定器将忽略绑定的服务，而是依赖应用程序中的 设置属性来 进行绑定和连接，基础配置
+      rabbit: #绑定器rabbitmq中输入输出通道的配置
+        bindings:
+          input:
+            consumer: #rabbitmq消费者配置
+              acknowledgeMode: AUTO #用来设置消息的确认模式 ，可选配置包含：NONE,MANUAL,AUTO,默认值AUTO
+              autoBindDlq: false #用来设置是否自动声明DLQ（Dead-Letter-Queue）,并绑定到DLX（Dead-Lletter-Exchange）上。默认false
+              durableSubscription: true #用来设置订阅是否被持久化，该参数仅在 group被设置的时候有效。默认true
+              maxConcurrency: 1 #用来设置消费者的最大 并发数，默认1
+              prefetch: 1 #用来设置 预取数量，它表示在 一次会话中从消息中间件中获取的消息数量，该值越大消息处理越快，但会导致非顺序处理的风险。默认1
+              prefix: #用来设置统一的目标 和队列名称前缀。默认空
+              recoveryInterval: 50000 #用来设置 恢复连接尝试 时间间隔，以毫秒为单位。默认50000
+              requeueRejected: true #用来设置消息传递失败时 重传，默认true
+              requestHeaderPatterns: [STANDARD_REQUEST_HEADERS,'*'] #用来设置 需要被传递的请求头信息。
+              replyHeaderPatterns: [STANDARD_REPLY_HEADERS,'*'] #用来设置需要被传递 的响应头信息
+ #             republishToDlq: #默认情况下，消息被重试也失败会被拒绝，如果DLQ被配置的时候，rabbitmq会将失败的消息路由到DLQ中，如果该参数设置为true，总线会将失败的信息附加一些头信息（包括异常信息，引起失败的跟踪堆栈）之后重新发不到DLQ中。默认空。此属性有问题，待解决？？？？？？
+              transacted: false #用来设置是否启用chanel-transacted,即是否在消息中使用 事务，默认false
+              txSize: 1 #用来设置transaction-size的数量，当acknowledge-Mode被设置为AUTO时，容器会在处理txSize数目消息之后才开始应答。
+          output:
+            producer:
+              autoBindDlq: false #用来设置是否自动声明DLQ（Dead-Letter-Queue）并绑定到DLX(Dead-Lletter-Exchange)上  
+              batchingEnabled: false #是否启动消息批处理，默认false
+              batchSize: 100 #当批处理开启时，用来设置缓存的批处理消息数量，默认100
+              batchTimeout: 5000 #批处理超时时间，默认5000
+              compress: false #消息发送时是否启用压缩，默认false
+              deliveryMode: PERSISTENT #消息发送模式，默认PERSISTENT
+              prefix: 用来设置统一的目标前缀，默认空
+              requestHeaderPatterns: [STANDARD_REQUEST_HEADERS,'*'] #用来设置需要被传递的请求头信息，此值默认
+              replyHeaderPatterns: [STANDARD_REPLY_HEADERS,'*'] #用来设置被传递的响应头信息，此值默认
+        binder: #rabbitmq的通用配置
+          adminAddresses: #该参数用来配置RabbitMQ管理插件的URL，当需要配置多个时用逗号分隔，该参数只有在nodes参数包含多个时使用，并且这里配置的内容必须在spring.rabbitmq.addresses中存在，待解决？？？？？？？？？？？
+          nodes: #该参数用来配置rabbitmq的节点 名称，当配置多个时 用逗号分隔，在配置多个的情况下 ，可以用来定位队列所在的服务器地址，这里配置的内容必须在spring.rabbitmq.addresses中存在。待解决？？？？？？？？？？？
+          compressionLevel: 1 #绑定通道的压缩级别，他的具体可选值及含义可见java.util.zip.Deflater中的定义，待解决？？？？？？？？ 
+      kafka: #自定义标识kafka绑定器通用配置
+        binder:
+          brokers: l27.0.0.1 #kafka绑定器连接的消息中间件列表，需要配置多个时用逗号分开，默认localhost,通用配置
+          defaultBrokerPort: 9092 #消息中间件端口号，默认9092，通用配置
+          zkNodes: 127.0.0.1 #kafka绑定器使用的zookeeper节点列表，需要 配置多个时用逗号分开默认localhost，通用配置
+          headers: #用来设置被传输的自定义头信息
+          offsetUpdateTimeWindow: 10000 #用来设置offset的更新频率，以毫秒为单位，如果设置0侧忽略，默认10000
+          offsetUpdateCount: 0 #用来设置offset以次数表示的更新频率，如果为0侧忽略 ，该参数与offsetUpdateTimeWindow互斥，默认0
+          requiredAcks: 1 #用来设置确认消息的 数量，默认1
+          minPartitionCount: 1 #该参数仅在设置了autoCreateTopic和autoAdd-Partitions时生效，用来设置该绑定器所使用主体的全局分区最小数量，如果当生产者的partitionCount参数或instanceCount*concurrency设置大于该参数配置时，该参数值将被覆盖，默认1  
+          replicationFactor: 1 #当autoCreateTopics参数为 true时候，用来配置自动创建主题的副本数量，默认1
+          autoCreateTopics: true #该参数默认true，绑定器会自动地创建新 主题，如果设置false，那么绑定器将 使用已经配置的主题，但是在这种情况下，如果需要使用的主题不存在，绑定器会启动失败，默认true
+          autoAddPartitions: false #该参数默认false，绑定器会根据已经配置的主题分区来实现，如果目标主题的分区数小于预期值，那么绑定器 会启动 失败，如果该参数设置为true，绑定器将在需要的时候自动创建新的分区，默认false
+          socketBufferSize: 2097152 #该参数用来设置Kafka的Socket缓存大小。默认2097152
+        bindings: #绑定器kafka中输入输出通道配置
+          input:
+            consumer:
+              autoCommitOffset: true #用来设置是否在处理消息时自动提交offset，如果设置false，在消息头会加入ACK头信息以实现延迟确认，默认true
+              autoCommitOnError: #该参数只有在 autoCommitOffset设置为true时才有效，当设置为false的时候，引起错误的消息不会自动提交offset，仅提交成功消息的 offset，如果设置为true，不论消息是否成功，都会自动提交，当不设置该值时，它实际上具有与enablelDlq相同的配置值
+              recoveryInterval: 5000 #尝试恢复连接的时间间隔，单位毫秒，默认5000
+              resetOffsets: false #是否使用提供的startOffset值来重置消费者的offset值，默认false
+              startOffset: null #用来设置新建的组的起始offset，该值也会在resetOffsets开始时被使用，默认null
+              enableDlq: false #该参数设置为true时，将为消费者启用DLQ行为，引起错误的消息将被发送到名为error.<destiination>.<group>的主题中去，默认false
+          output:
+            producer:
+              bufferSize: 16384 #kafka批量发送前的缓存数据上限以字节为单位，默认16384
+              sync: false #该参数用来设置 kafka消息生产者的发送模式，默认false，即采用async配置，允许批量发送数据，当设置为true时，即采用sync配置，消息将不会被批量发送，而是一条一条地发送，
+              batchTimeout: 0 #消息生产者批量发送时，为了积累跟多发送数据而设置的等待时间，通常情况下，生产者基本不会等待，而是直接发送所有在前一批次发送时积累的数据，当我们设置一个非0值时，可以以延迟为代价来增加系统的吞吐量
+#      defaultBinder: rabbit #使用RabbitMQ设置默认绑定器，当应用程序中有多个绑定 器时使用
+      bindings: #通道配置
+        output:
+          binder: rabbit2 #指定绑定器，显式别名的配置方式，指定输出通道 的绑定，此种绑定要通过spring.cloud.stream.binders.<别名>.前缀配置属性，如下rabbit2的配置。
+          destination: sink-channel #该参数用来配置消息通道绑定到消息中间件的目标名称，比如rabbitmq中的Exchange或kafka中的Topic，如果配置的绑定通道是一个消费者（输入通道），那么它可以绑定多个目标，用逗号分开，如果没有配置该属性，将使用通道名
+          producer: #分区功能没有实现，待解决？？？？？？？？？？？
+#            partitionKeyExpression: null #指定分区键的表达式规则，可以根据实际的输出消息规则配置SpEL来生成合适的分区键。与partitionKkeyExtractorClass参数互斥，默认null，此设置待解决？？？？？？？？？？
+#            partitionCount: 2 #指定消息 分区的数量
+            partitionKeyExtractorClass: null #该参数用来配置分区键提取策略接口PartitionKeyExtractorStrategy的实现，当设置该属性之后 ，将 对当前绑定的输出数据进行分区处理，同时partitionCount参数必须大于1才能生效，该参数与partitionKeyExpression参数互斥，不能同时设置。默认null
+            partitionSelectorClass: null #该参数用来指定分区选择器接口PartitionSelectorStrategy的实现，与partitionSelectorExpression参数互斥，不能同时设置，如果两者都不设置，那么分区选择计算规则为hashCode(key)%partitionCount,这里的key根据partitionKeyExpression或partition-KeyExtractorClass的配置计算得到。
+            partitionSelectorExpression: null #该参数用来设置自定义分区选择器的SpEL表达式，他与partitionSelectorClass参数互斥，不能同时设置，如果两者都不设置，那么分区选择计算规则为hashCode(key)%partitionCount,这里的key根据partitionKeyExpression或partition-KeyExtractorClass的配置计算得到。
+            partitionCount: 1 #当分区功能开启时，使用该参数来配置消息数据的分区数，如果消息生产者已经配置了分区键的生成策略，那么他的值必须大于1.
+            headerMode: embeddedHeaders #当设置为raw的时候将禁用对消息 头的解析，该 消息 只有在使用不支持消息头功能的中间件是有效，因为spring cloud stream默认会解析嵌入的头部信息,默认embeddedHeaders
+        input:
+          destination: 2-channel 
+          binder: kafka2 #当存在多个绑定器时使用该参数来指定当前通道使用哪个具体的绑定器，注意：上面的默认绑定器和此绑定器的名称并不是消息中间件的名称，而是每个绑定器实现的META-INE/spring.binnders文件中定义的标识（一个绑定器实现的标识 可以有多个，以逗号隔开）？？？？？？？
+          group: Service-A #该参数用来设置绑定消费通道的消费组，作用于输入通道，以保证同一消费组中的消息只会有一个消费实例接收和处理，指定该应用实例都属于Service-A消费组，当部署一个服务多个实例时，在同一个组的实例，只有一个实例消费，以伦轮询的方式进行解收和输出
+          concurrency: 1 #输入通道消费者的并发数，默认1
+          partitioned: false #来自消息生产者的数据是否采用了分区
+          headerMode: embeddedHeaders #当设置为raw的时候将禁用对消息 头的解析，该 消息 只有在使用不支持消息头功能的中间件是有效，因为spring cloud stream默认会解析嵌入的头部信息,默认embeddedHeaders
+          maxAttempts: 3 #对输入通道消息处理的最大重试次数，默认3
+          backOffInitialInterval: 1000 #重试消息处理的初始间隔时间，默认1000
+          backOffMaxInterval: 10000 #重试消息 处理的最大间隔时间，默认10000
+          backOffMultiplier: 2.0 #重试消息处理时间间隔的递增乘数，默认2.0
+      binders:  #以下是自定义绑定器的属性配置
+        kafka2:
+          type: kafka
+        rabbit2:
+          type: rabbit #指定绑定器的类型，可以是rabbit，kafka，等其它自定义绑定器的标识名    
+          inheritEnvironment: true #当前绑定器是否继承应用程序自身的环境配置，默认true。
+          defaultCandidate: true #用来设置当前绑定器配置是否被视为默认绑定器的候选项，默认 true，当需要让当前配置不影响默认配置时，可以将该属性 设置 为false。
+          environment: #设置各绑定器属性（默认为空），如以下配置，
+            spring:
+              rabbitmq:
+                host: 127.0.0.1 
+                port: 5672
+                username: springcloud
+                password: 123456

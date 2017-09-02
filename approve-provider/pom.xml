@@ -19,6 +19,17 @@
 	</parent>
 
 	<dependencies>
+<!-- 	重试机制 -->
+<!-- 功能1，客户端连接config server失败之后 会继续 尝试，直到第6次失败后，才 返回错误信息 -->
+		<dependency>
+			<groupId>org.springframework.retry</groupId>
+			<artifactId>spring-retry</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-aop</artifactId>
+		</dependency>
+		
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-config</artifactId>

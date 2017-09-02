@@ -24,6 +24,8 @@
 		<module>approve-provider</module>
 		<module>approve-zuul</module>
 		<module>client-ribbon</module>
+		<module>stream4</module>
+		<module>stream</module>
 <!-- 		<module>consume-feign</module> -->
 	</modules>
 

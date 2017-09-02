@@ -1,0 +1,11 @@
+server.port: 8899
+fixedDelay: 5000
+spring:
+  cloud:
+    stream:
+      bindings:
+        output:
+          destination: source-channel #输出管道，向管道中输入信息
+        input:
+          destination: sink-channel #输入管道，从管道中输出，显示信息
+spring.cloud.stream.bindings.input.content-type: application/json #为此注解@StreamListener指定一个头类型，进行json转换

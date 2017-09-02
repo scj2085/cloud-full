@@ -83,7 +83,7 @@ hystrix:
         rollingStats:
           time-InMilliseconds: 10000 #用来设置滚动时间窗的长度，单位毫秒，该滚动时间窗的长度用于线程池的指标度量，它 会被分成多个桶来统计指标，默认10000， 全局配置    
           numBuckets: 10 #用来设置滚动时间窗被划分成桶的数量，默认10，全局配置，注意：time-InMilliseconds参数的设置必须能够被numBuckets参数整除，不然会抛出异常
-          
+#重试机制的配置          
 approve: #对approve服务（提供服务方）的调用配置,此配置是指定某个服务实例的配置，如果是全局配置 不加approve服务名，即ribbon.Connectimeout=value
   ribbon:
     ConnectTimeout: 250 #请求连接的超时时间

@@ -1,0 +1,32 @@
+spring:
+  cloud:
+    stream:
+      defaultBinder: rabbit1 #使用RabbitMQ设置默认绑定器,通用基础配置
+      bindings: #绑定通道配置
+        testChannel: #通道名称
+          binder: rabbit1 #绑定器标识符
+          content-type: application/json #指定传递参数类型
+        testChannel2:
+          binder: rabbit1
+          content-type: application/json
+        testChannel3:
+          binder: rabbit1
+      binders: #自定义绑定器配置
+        rabbit1: #绑定器标识符
+          type: rabbit #绑定器类型
+          environment: #设置绑定器属性
+            spring:
+              rabbitmq:
+                host: 127.0.0.1
+                port: 5672
+                username: guest
+                password: guest
+        rabbit2:
+          type: rabbit
+          environment:
+            spring:
+              rabbitmq:
+                host: 127.0.0.1
+                port: 5673
+                username: springcloud
+                password: 123456
