@@ -23,6 +23,7 @@ spring:
           basedir: /tmp/config #指定一个固定的位置存储从远处git仓库clone的配置信息，在使用了git仓库后，文件都会在config-server的本地文件系统中存储一份，这些文件默认存储在以config-repo为前缀的临时文件目录中，由于随机性及临时目录的特性，为了避免出现问题，给它指定一个目录。
  #         access_token: "32a1ca28-bc7a-4147-88a1-c95abcc30556"
 #    bus:
+<<<<<<< Updated upstream
 #      destination: bus
 #eureka:
 #  client:
@@ -42,3 +43,10 @@ security:
   user: 
     name: shichangjian #为此服务添加访问权限
     password: 123    
+=======
+#      destination: bus 
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: "http://peer1:8761/eureka/,http://peer2:8762/eureka/,http://peer3:8763/eureka/" #注册到集群中-
+>>>>>>> Stashed changes
